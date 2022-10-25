@@ -1,0 +1,6 @@
+[submodule "submodules/smufl"]
+	path = submodules/smufl
+	url = git@github.com:w3c/smufl.git
+[submodule "submodules/bravura"]
+	path = submodules/bravura
+	url = git@github.com:steinbergmedia/bravura.git

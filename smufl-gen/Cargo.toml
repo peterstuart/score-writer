@@ -1,0 +1,12 @@
+[package]
+name = "smufl-gen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.66"
+clap = { version = "4.0.18", features = ["derive"] }
+codegen = "0.2.0"
+convert_case = "0.6.0"
+serde = { version = "1.0.147", features = ["derive"] }
+serde_json = "1.0.87"

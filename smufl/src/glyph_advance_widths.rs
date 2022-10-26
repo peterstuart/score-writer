@@ -1,8 +1,4 @@
-use std::collections::HashMap;
-
-use serde::Deserialize;
-
-use crate::{glyph_or_unknown::GlyphOrUnknown, Glyph, StaffSpaces};
+use crate::{GlyphData, StaffSpaces};
 
 /// Advance width of each glyph.
 ///
@@ -22,14 +18,4 @@ use crate::{glyph_or_unknown::GlyphOrUnknown, Glyph, StaffSpaces};
 /// centered on the stem.
 ///
 /// See <https://w3c.github.io/smufl/latest/specification/glyphadvancewidths.html>.
-#[derive(Debug, Default, Deserialize)]
-#[serde(transparent)]
-pub struct GlyphAdvanceWidths {
-    widths: HashMap<GlyphOrUnknown, StaffSpaces>,
-}
-
-impl GlyphAdvanceWidths {
-    pub fn get(&self, glyph: Glyph) -> Option<StaffSpaces> {
-        self.widths.get(&GlyphOrUnknown::Glyph(glyph)).copied()
-    }
-}
+pub type GlyphAdvanceWidths = GlyphData<StaffSpaces>;

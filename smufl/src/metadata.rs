@@ -1,6 +1,8 @@
 use std::io::Read;
 
+use itertools::Itertools;
 use serde::Deserialize;
+use tracing::{debug, instrument};
 
 use crate::{EngravingDefaults, GlyphAdvanceWidths, GlyphAnchors, GlyphBoundingBoxes};
 
@@ -22,8 +24,30 @@ pub struct Metadata {
 }
 
 impl Metadata {
+    #[instrument(skip(reader), err(Debug))]
     pub fn from_reader(reader: impl Read) -> Result<Self, serde_json::Error> {
-        serde_json::from_reader(reader)
+        let metadata: Self = serde_json::from_reader(reader)?;
+
+        metadata.log_unknowns();
+
+        Ok(metadata)
+    }
+
+    fn log_unknowns(&self) {
+        let unknowns = self
+            .advance_widths
+            .unknown_glyphs()
+            .chain(self.anchors.unknown_glyphs())
+            .chain(self.boxes.unknown_glyphs())
+            .unique()
+            .sorted()
+            .collect::<Vec<_>>();
+
+        if unknowns.is_empty() {
+            debug!("No unknowns glyphs found");
+        } else {
+            debug!(?unknowns, "Unknown glyphs found");
+        }
     }
 }
 

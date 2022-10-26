@@ -23,3 +23,14 @@ impl<T: Copy> GlyphData<T> {
         self.data.get(&GlyphOrUnknown::Glyph(glyph)).copied()
     }
 }
+
+impl<T> GlyphData<T> {
+    /// Returns all the unknown glyphs (glyphs whose name was not recognized)
+    /// which have data.
+    pub(crate) fn unknown_glyphs(&self) -> impl Iterator<Item = &String> {
+        self.data.keys().filter_map(|key| match key {
+            GlyphOrUnknown::Unknown(unknown) => Some(unknown),
+            _ => None,
+        })
+    }
+}
